@@ -5,7 +5,7 @@ import random
 # Pre-defined set of words to exclude
 pre_excluded_words = {
     "I", "you", "he", "she", "it", "we", "they", "me", "us", "him", "her", 
-    "my", "your", "his", "our", "them", "their", "a", "get", "do", "don't", 
+    "my", "your", "his", "our", "them", "their", "a", "get", "do", "don't", "ve",
     "don", "try", "in", "on", "at", "by", "for", "with", "about", "against", 
     "between", "into", "through", "during", "before", "after", "above", "ll","re"
     "below", "to", "from", "up", "down", "in", "out", "over", "under", "again", "further", "then", "once",
