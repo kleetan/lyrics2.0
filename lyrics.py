@@ -1,13 +1,14 @@
 import streamlit as st
 import re
 import random
+from fpdf import FPDF
 
 # Pre-defined set of words to exclude
 pre_excluded_words = {
-    "I", "you", "he", "she", "it", "we", "they", "me", "us", "him", "her", "m","t",
-    "my", "your", "his", "our", "them", "their", "a", "get", "do", "don't", "ve",
-    "don", "try", "in", "on", "at", "by", "for", "with", "about", "against", "A","An","an",
-    "between", "into", "through", "during", "before", "after", "above", "ll","re"
+    "I", "you", "he", "she", "it", "we", "they", "me", "us", "him", "her", 
+    "my", "your", "his", "our", "them", "their", "a", "g", "do", "don't", 
+    "don", "t", "in", "on", "at", "by", "for", "with", "about", "against", 
+    "between", "into", "through", "during", "before", "after", "above", 
     "below", "to", "from", "up", "down", "in", "out", "over", "under", "again", "further", "then", "once",
     "is", "will", "be", "was", "were", "am", "are", "has", "have", "had", "not", "an", "the", "this", "that"
 }
@@ -31,6 +32,14 @@ def replace_words_with_brackets(lyrics, excluded_words, num_words_to_replace):
     # Replace words in lyrics
     replaced_lyrics = re.sub(r'\b\w+\b', lambda match: replacement_dict.get(match.group(0), match.group(0)), lyrics)
     return replaced_lyrics, replaced_words
+
+def generate_pdf(lyrics):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 10, lyrics)
+    return pdf
 
 def main():
     st.title("Lyrics Replacement App")
@@ -72,6 +81,12 @@ def main():
             
             st.subheader("Replaced Words:")
             st.write(", ".join(f"{i}: {word}" for i, word in enumerate(replaced_words, 1)))
+            
+            pdf = generate_pdf(replaced_lyrics)
+            pdf_output = "processed_lyrics.pdf"
+            pdf.output(pdf_output)
+            with open(pdf_output, "rb") as file:
+                st.download_button("Download PDF", file, file_name="processed_lyrics.pdf", mime="application/pdf")
         else:
             st.error("Please enter lyrics.")
 
