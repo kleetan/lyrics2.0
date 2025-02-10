@@ -8,7 +8,8 @@ pre_excluded_words = {
     "my", "your", "his", "our", "them", "their", "a", "g", "do", "don't", 
     "don", "t", "in", "on", "at", "by", "for", "with", "about", "against", 
     "between", "into", "through", "during", "before", "after", "above", 
-    "below", "to", "from", "up", "down", "in", "out", "over", "under", "again", "further", "then", "once"
+    "below", "to", "from", "up", "down", "in", "out", "over", "under", "again", "further", "then", "once",
+    "is", "will", "be", "was", "were", "am", "are", "has", "have", "had", "not"
 }
 
 def replace_words_with_brackets(lyrics, excluded_words, num_words_to_replace):
@@ -32,43 +33,20 @@ def replace_words_with_brackets(lyrics, excluded_words, num_words_to_replace):
     return replaced_lyrics, replaced_words
 
 def main():
-    st.title("Lyrics Input and Processing App")
+    st.title("Lyrics Replacement App")
     
-    # User inputs lyrics
-    lyrics_input = st.text_area("Enter lyrics:")
+    # User input for lyrics
+    lyrics = st.text_area("Enter lyrics:", height=300)
     
     # Slider for number of words to replace
     num_words_to_replace = st.slider("Select number of words to replace:", 1, 20, 10)
     
-    # Toggle for "Advanced Options"
-    advanced_options = st.checkbox("Advanced Options")
-    
-    if advanced_options:
-        st.subheader("Pre-defined excluded words:")
-        st.write(sorted(pre_excluded_words))
-        
-        st.subheader("Additional excluded words:")
-        additional_excluded_words = st.text_area("Enter additional words separated by commas:")
-        
-        st.subheader("Words to delete from exclusion list:")
-        deleting_excluded_words = st.text_area("Enter words to delete separated by commas:")
-    else:
-        additional_excluded_words = ""
-        deleting_excluded_words = ""
-    
     if st.button("Process Lyrics"):
-        if lyrics_input:
-            # Convert user-input additional and deleting words into lists
-            additional_words = [word.strip() for word in additional_excluded_words.split(',') if word.strip()]
-            deleting_words = [word.strip() for word in deleting_excluded_words.split(',') if word.strip()]
-            
-            # Define the final excluded words list
-            final_excluded_words = pre_excluded_words.union(additional_words) - set(deleting_words)
-            
-            replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics_input, final_excluded_words, num_words_to_replace)
+        if lyrics:
+            replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics, pre_excluded_words, num_words_to_replace)
             
             st.subheader("Processed Lyrics:")
-            st.write(replaced_lyrics)
+            st.text_area("", replaced_lyrics, height=300)
             
             st.subheader("Replaced Words:")
             for i, word in enumerate(replaced_words, 1):
