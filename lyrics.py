@@ -9,7 +9,7 @@ pre_excluded_words = {
     "don", "t", "in", "on", "at", "by", "for", "with", "about", "against", 
     "between", "into", "through", "during", "before", "after", "above", 
     "below", "to", "from", "up", "down", "in", "out", "over", "under", "again", "further", "then", "once",
-    "is", "will", "be", "was", "were", "am", "are", "has", "have", "had", "not"
+    "is", "will", "be", "was", "were", "am", "are", "has", "have", "had", "not", "an", "the", "this", "that"
 }
 
 def replace_words_with_brackets(lyrics, excluded_words, num_words_to_replace):
@@ -36,17 +36,24 @@ def main():
     st.title("Lyrics Replacement App")
     
     # User input for lyrics
-    lyrics = st.text_area("Enter lyrics:", height=300)
+    lyrics = st.text_area("Enter lyrics:", height=400)
     
     # Slider for number of words to replace
     num_words_to_replace = st.slider("Select number of words to replace:", 1, 20, 10)
+    
+    # Toggle for "Advanced Options"
+    advanced_options = st.checkbox("Advanced Options")
+    
+    if advanced_options:
+        st.subheader("Pre-defined excluded words:")
+        st.write(sorted(pre_excluded_words))
     
     if st.button("Process Lyrics"):
         if lyrics:
             replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics, pre_excluded_words, num_words_to_replace)
             
             st.subheader("Processed Lyrics:")
-            st.text_area("", replaced_lyrics, height=300)
+            st.text_area("", replaced_lyrics, height=400)
             
             st.subheader("Replaced Words:")
             for i, word in enumerate(replaced_words, 1):
