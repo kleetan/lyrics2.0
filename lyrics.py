@@ -47,10 +47,25 @@ def main():
     if advanced_options:
         st.subheader("Pre-defined excluded words:")
         st.write(sorted(pre_excluded_words))
+        
+        st.subheader("Additional excluded words:")
+        additional_excluded_words = st.text_area("Enter additional words separated by commas:")
+        
+        st.subheader("Words to delete from exclusion list:")
+        deleting_excluded_words = st.text_area("Enter words to delete separated by commas:")
+        
+        # Convert user input into lists
+        additional_words = {word.strip() for word in additional_excluded_words.split(',') if word.strip()}
+        deleting_words = {word.strip() for word in deleting_excluded_words.split(',') if word.strip()}
+        
+        # Define the final excluded words list
+        final_excluded_words = pre_excluded_words.union(additional_words) - deleting_words
+    else:
+        final_excluded_words = pre_excluded_words
     
     if st.button("Process Lyrics"):
         if lyrics:
-            replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics, pre_excluded_words, num_words_to_replace)
+            replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics, final_excluded_words, num_words_to_replace)
             
             st.subheader("Processed Lyrics:")
             st.text_area("", replaced_lyrics, height=400)
