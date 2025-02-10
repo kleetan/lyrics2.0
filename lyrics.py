@@ -46,7 +46,7 @@ def main():
     
     if advanced_options:
         st.subheader("Pre-defined excluded words:")
-        st.write(sorted(pre_excluded_words))
+        st.write(", ".join(sorted(pre_excluded_words)))
         
         st.subheader("Additional excluded words:")
         additional_excluded_words = st.text_area("Enter additional words separated by commas:")
@@ -71,8 +71,7 @@ def main():
             st.text_area("", replaced_lyrics, height=400)
             
             st.subheader("Replaced Words:")
-            for i, word in enumerate(replaced_words, 1):
-                st.write(f"{i} : {word}")
+            st.write(", ".join(f"{i}: {word}" for i, word in enumerate(replaced_words, 1)))
         else:
             st.error("Please enter lyrics.")
 
