@@ -7,7 +7,7 @@ pre_excluded_words = {
     "I", "you", "he", "she", "it", "we", "they", "me", "us", "him", "her", 
     "my", "your", "his", "our", "them", "their", "a", "get", "do", "don't", 
     "don", "try", "in", "on", "at", "by", "for", "with", "about", "against", 
-    "between", "into", "through", "during", "before", "after", "above", 
+    "between", "into", "through", "during", "before", "after", "above", "ll","re"
     "below", "to", "from", "up", "down", "in", "out", "over", "under", "again", "further", "then", "once",
     "is", "will", "be", "was", "were", "am", "are", "has", "have", "had", "not", "an", "the", "this", "that"
 }
