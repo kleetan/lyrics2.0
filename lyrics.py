@@ -12,13 +12,17 @@ pre_excluded_words = {
     "is", "will", "be", "was", "were", "am", "are", "has", "have", "had", "not", "an", "the", "this", "that"
 }
 
-def replace_words_with_brackets(lyrics, excluded_words, num_words_to_replace):
+def replace_words_with_brackets(lyrics, excluded_words, must_replace_words, num_words_to_replace):
     # Split lyrics into words
     words = re.findall(r'\b\w+\b', lyrics)
     # Exclude specific words
     exclude_words = set(excluded_words)
-    # Randomly select specified number of words
-    words_to_replace = set(random.sample([word for word in words if word not in exclude_words], min(num_words_to_replace, len(words))))
+    # Ensure must_replace_words are included in replacement
+    words_to_replace = set(must_replace_words).intersection(words)
+    additional_words = set(random.sample([word for word in words if word not in exclude_words and word not in words_to_replace], 
+                                         min(num_words_to_replace - len(words_to_replace), len(words) - len(words_to_replace))))
+    words_to_replace.update(additional_words)
+    
     # Create dictionary to replace words
     replacement_dict = {}
     replaced_words = []
@@ -54,18 +58,23 @@ def main():
         st.subheader("Words to delete from exclusion list:")
         deleting_excluded_words = st.text_area("Enter words to delete separated by commas:")
         
+        st.subheader("Words that must be replaced:")
+        must_replace_words_input = st.text_area("Enter words that must be replaced, separated by commas:")
+        
         # Convert user input into lists
         additional_words = {word.strip() for word in additional_excluded_words.split(',') if word.strip()}
         deleting_words = {word.strip() for word in deleting_excluded_words.split(',') if word.strip()}
+        must_replace_words = {word.strip() for word in must_replace_words_input.split(',') if word.strip()}
         
         # Define the final excluded words list
         final_excluded_words = pre_excluded_words.union(additional_words) - deleting_words
     else:
         final_excluded_words = pre_excluded_words
+        must_replace_words = set()
     
     if st.button("Process Lyrics"):
         if lyrics:
-            replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics, final_excluded_words, num_words_to_replace)
+            replaced_lyrics, replaced_words = replace_words_with_brackets(lyrics, final_excluded_words, must_replace_words, num_words_to_replace)
             
             st.subheader("Processed Lyrics:")
             st.text_area("", replaced_lyrics, height=400)
@@ -77,3 +86,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
